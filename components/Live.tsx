@@ -1,11 +1,17 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import LiveCursor from './cursor/LiveCursor'
 import { useOthers } from '@liveblocks/react'
 import { useMyPresence } from '@/liveblocks.config';
+import CursorChat from './cursor/CursorChat';
+import { CursorMode } from '../types/type';
 
 const Live = () => {
     const others = useOthers(); //This hook return all the other user in the room
     const [{ cursor }, updateMyPresence] = useMyPresence() as any; //Returns the presence of the current user of the current room
+
+    const [cursorState, setCursorState] = useState({
+        mode: CursorMode.Hidden
+    });
 
     const handlePointerMove = useCallback((event: React.PointerEvent) => {
         event.preventDefault()
@@ -21,7 +27,7 @@ const Live = () => {
 
     const handlePointerLeave = useCallback((event: React.PointerEvent) => {
         event.preventDefault()
-
+        setCursorState({ mode: CursorMode.Hidden })
         updateMyPresence({ cursor: null, message: null });
     }, []);
 
@@ -44,6 +50,14 @@ const Live = () => {
             className='flex w-full h-screen justify-center items-center text-center'
         >
             <h1 className="font-bold text-white text-2xl">Hello World</h1>
+            {cursor && (
+                <CursorChat
+                    Cursor={cursor}
+                    cursorState={cursorState}
+                    setCursorState={setCursorState}
+                    updateMyPresence={updateMyPresence}
+                />
+            )}
             <LiveCursor others={others} />
         </div>
     )
