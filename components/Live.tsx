@@ -52,7 +52,7 @@ const Live = () => {
             <h1 className="font-bold text-white text-2xl">Hello World</h1>
             {cursor && (
                 <CursorChat
-                    Cursor={cursor}
+                    cursor={cursor}
                     cursorState={cursorState}
                     setCursorState={setCursorState}
                     updateMyPresence={updateMyPresence}
